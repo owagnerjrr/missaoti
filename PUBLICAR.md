@@ -66,4 +66,13 @@ entender a separação por prefixo. As salas não coletam nome completo ou telef
 Sintaxe e build verificados. Testes com Redis simulado confirmaram entrada
 simultânea sem perda de jogadores, reenvio de respostas sem duplicação de XP,
 pontuação final, autorização dos controles, URL pública e fechamento da sala.
-Publicação, Redis real, teste de carga e acesso por dados móveis ainda pendentes.
+Validação de produção em 04/10/2026: criação pelo painel /admin?nova=1,
+QR com https://missaoti.vercel.app, entrada e início automático em duas sessões
+separadas (Brave e navegador interno do Codex), atualização do ranking sem perda
+de jogadores, cinco fases, recuperação do progresso após atualizar as páginas,
+oito personagens incluindo R2-D2 e C-3PO, QR oculto no ranking de ambos os alunos
+concluídos e encerramento com resultado final passaram com Redis real.
+O teste da API pública também reenviou respostas simultaneamente, sem duplicar
+XP: os dois clientes terminaram com 1000 XP. O acesso público não exigiu login
+na Vercel. As salas de validação foram encerradas e expiram automaticamente.
+Teste de carga para 150 jogadores e teste físico por dados móveis ainda pendentes.
