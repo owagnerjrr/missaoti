@@ -2,7 +2,8 @@
 
 Esta versão permite que alunos usem Wi-Fi ou dados móveis (3G/4G/5G), de qualquer
 rede. Requer publicação na Vercel e um banco Upstash Redis conectado.
-Não está publicada ainda: nenhum endereço público foi criado nesta entrega.
+Site público: https://missaoti.vercel.app
+Painel: https://missaoti.vercel.app/admin?nova=1
 A versão local anterior continua funcionando separadamente, sem internet.
 
 ## Publicar
@@ -23,8 +24,16 @@ A versão local anterior continua funcionando separadamente, sem internet.
 
 Não use variáveis NEXT_PUBLIC ou VITE para o token. Ele fica somente no servidor.
 Não compartilhe senhas ou tokens em mensagens. O navegador não recebe o token.
-Se o banco conectado oferecer outros nomes de variáveis, configure explicitamente
-os dois nomes acima com os valores REST correspondentes.
+O servidor também aceita o par KV_REST_API_URL / KV_REST_API_TOKEN criado pela
+integração Upstash no Marketplace da Vercel. Esse par é mapeado no backend para
+a mesma conexão REST, sem enviar credenciais ao cliente. Mantenha ambos como
+segredos gerenciados. Um par UPSTASH_* completo tem prioridade; não misture URL
+de um banco com token de outro. Nunca use KV_REST_API_READ_ONLY_TOKEN para gravar.
+
+O projeto missaoti utiliza o banco dedicado missaoti-redis no plano Free,
+com PUBLIC_BASE_URL=https://missaoti.vercel.app em produção. Confira os limites
+atuais na integração antes de uma atividade e não habilite um plano pago sem
+autorização.
 
 5. Publique novamente após configurar as variáveis. A URL de produção precisa
    permitir visitantes sem conta Vercel: confirme a configuração de proteção do

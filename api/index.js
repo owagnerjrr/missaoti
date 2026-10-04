@@ -2,7 +2,13 @@ const crypto=require('node:crypto'),QR=require('qrcode');
 const {specific,questions}=require('../lib/game-data');
 function publicRoom(r){return {code:r.code,status:r.status,open:r.open,joinUrl:r.joinUrl,players:Object.values(r.players).map(p=>({id:p.id,name:p.name,area:p.area,avatar:p.avatar,xp:p.xp,stage:p.stage,finished:p.stage===5})).sort((a,b)=>b.xp-a.xp||b.stage-a.stage||a.name.localeCompare(b.name))}}
 class HttpError extends Error{constructor(message,status=400){super(message);this.status=status}}
-async function redis(command){if(!process.env.UPSTASH_REDIS_REST_URL||!process.env.UPSTASH_REDIS_REST_TOKEN)throw new HttpError('O banco online ainda não foi configurado pelo apresentador.',503);const r=await fetch(process.env.UPSTASH_REDIS_REST_URL,{method:'POST',headers:{Authorization:'Bearer '+process.env.UPSTASH_REDIS_REST_TOKEN,'Content-Type':'application/json'},body:JSON.stringify(command),signal:AbortSignal.timeout(8000)});const j=await r.json();if(!r.ok||j.error)throw new HttpError('O banco está temporariamente indisponível. Tente novamente.',503);return j.result}
+function redisConfig(){
+// A integração Upstash da Vercel fornece os aliases KV_* como segredos gerenciados.
+if(process.env.UPSTASH_REDIS_REST_URL&&process.env.UPSTASH_REDIS_REST_TOKEN)return {url:process.env.UPSTASH_REDIS_REST_URL,token:process.env.UPSTASH_REDIS_REST_TOKEN};
+if(process.env.KV_REST_API_URL&&process.env.KV_REST_API_TOKEN)return {url:process.env.KV_REST_API_URL,token:process.env.KV_REST_API_TOKEN};
+throw new HttpError('O banco online ainda não foi configurado pelo apresentador.',503)
+}
+async function redis(command){const config=redisConfig();const r=await fetch(config.url,{method:'POST',headers:{Authorization:'Bearer '+config.token,'Content-Type':'application/json'},body:JSON.stringify(command),signal:AbortSignal.timeout(8000)});const j=await r.json();if(!r.ok||j.error)throw new HttpError('O banco está temporariamente indisponível. Tente novamente.',503);return j.result}
 const prefix='missao-ti:room:';
 async function get(code){if(!/^\d{6}$/.test(String(code)))throw new HttpError('Informe um código de sala válido.',404);const raw=await redis(['GET',prefix+code]);if(!raw)throw new HttpError('Sala não encontrada. Escaneie o QR Code atual.',404);return {raw,room:JSON.parse(raw)}}
 const CAS="if redis.call('GET',KEYS[1]) == ARGV[1] then redis.call('SET',KEYS[1],ARGV[2],'EX',ARGV[3]); return 1 else return 0 end";
