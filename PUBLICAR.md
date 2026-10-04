@@ -45,6 +45,13 @@ autorização.
 
 ## Operação
 
+Ao encerrar a partida, o painel e o telão mostram "Escolhas da turma": quantidade
+e percentual em cada área, a área mais escolhida (ou empate) e as escolhas
+individuais de área e personagem. Todos os inscritos entram na contagem,
+inclusive quem não concluiu a missão. No painel, "Baixar relatório CSV" exporta
+o resumo e os dados individuais com XP e desafios concluídos. Baixe antes de
+criar outra turma ou da expiração da sala. O arquivo não contém tokens.
+
 O apresentador precisa de internet para controlar a versão online. Os alunos
 podem usar redes diferentes. Todos utilizam a mesma sala no endereço público.
 O PC não precisa hospedar o servidor online, mas precisa ficar ligado para projetar.
